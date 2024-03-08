@@ -5,29 +5,12 @@ namespace Exercises.Bowling
     {
         public int? Score(int[] rolls)
         {
-            var frames = new List<Frame>();
-
-            var frameIdx = 0;
-            Frame? currentFrame = null;
-
-            foreach (var roll in rolls)
-            {
-                if(currentFrame == null || currentFrame.IsComplete())
-                {
-                    currentFrame = new Frame { Index = frameIdx, FirstRoll = roll };
-                    frames.Add(currentFrame);
-                    frameIdx++;
-                }
-                else
-                {
-                    currentFrame.SecondRoll = roll;
-                }
-            }
+            var frames = CreateFrames(rolls);
 
             var score = 0;
             foreach (var frame in frames)
             {
-                if(frame.IsSpare())
+                if (frame.IsSpare())
                 {
                     // add score with bonus
                     var nextFrame = frames
@@ -40,12 +23,34 @@ namespace Exercises.Bowling
                 }
                 else
                 {
-                    // open frame... extract?
                     score += frame.FirstRoll + (frame.SecondRoll ?? 0);
                 }
             }
 
             return score;
+        }
+
+        private static List<Frame> CreateFrames(int[] rolls)
+        {
+            var frames = new List<Frame>();
+
+            var frameIdx = 0;
+            Frame? currentFrame = null;
+            foreach (var roll in rolls)
+            {
+                if (currentFrame == null || currentFrame.IsComplete())
+                {
+                    currentFrame = new Frame { Index = frameIdx, FirstRoll = roll };
+                    frames.Add(currentFrame);
+                    frameIdx++;
+                }
+                else
+                {
+                    currentFrame.SecondRoll = roll;
+                }
+            }
+
+            return frames;
         }
     }
 
