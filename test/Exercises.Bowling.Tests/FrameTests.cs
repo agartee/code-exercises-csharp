@@ -31,6 +31,19 @@ namespace Exercises.Bowling.Tests
         }
 
         [Fact]
+        public void IsComplete_WithStrike_ReturnsTrue()
+        {
+            // arrange
+            var frame = new Frame { FirstRoll = 10 };
+
+            // act
+            var result = frame.IsComplete();
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
         public void IsSpare_WithFirstRollOnly_ReturnsFalse()
         {
             // arrange

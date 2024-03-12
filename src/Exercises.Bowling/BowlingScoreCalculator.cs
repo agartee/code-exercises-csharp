@@ -10,16 +10,22 @@ namespace Exercises.Bowling
             var score = 0;
             foreach (var frame in frames)
             {
+                var nextFrame = frames // LINQ
+                    .FirstOrDefault(f => f.Index == frame.Index + 1);
+
                 if (frame.IsSpare())
                 {
-                    // add score with bonus
-                    var nextFrame = frames
-                        .FirstOrDefault(f => f.Index == frame.Index + 1);
-
                     if (nextFrame == null)
                         return null;
 
                     score += frame.FirstRoll + frame.SecondRoll!.Value + nextFrame.FirstRoll;
+                }
+                else if(frame.IsStrike())
+                {
+                    if (nextFrame == null)
+                        return null;
+
+                    score += frame.FirstRoll + nextFrame.FirstRoll + nextFrame.SecondRoll!.Value;
                 }
                 else
                 {
@@ -62,12 +68,17 @@ namespace Exercises.Bowling
 
         public bool IsComplete()
         {
-            return SecondRoll != null;
+            return FirstRoll == 10 || SecondRoll != null;
         }
 
         public bool IsSpare()
         {
             return SecondRoll != null && FirstRoll + SecondRoll == 10;
+        }
+
+        public bool IsStrike()
+        {
+            return FirstRoll == 10;
         }
     }
 }
