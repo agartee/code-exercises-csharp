@@ -90,5 +90,28 @@ namespace Exercises.Bowling.Tests
                 + 12 // second frame 
                 + 2); // third frame
         }
+        
+        [Fact]
+        public void Score_WithStrikeAndFollowingStrikeAndFollowingSpare_ReturnsExpectedScoreWithBonus()
+        {
+            // arrange
+            var bowlingScoreCalculator = new BowlingScoreCalculator();
+            var rolls = new[] { 10, 10, 10, 9, 1, 1 };
+
+            // act
+            var result = bowlingScoreCalculator.Score(rolls);
+
+            // assert
+            result.Should().Be(
+                30 // first frame 
+                + 29 // second frame 
+                + 20 // third frame 
+                + 11 // forth frame
+                + 1); // fifth frame
+        }
+
+        // todo: 10 frame game (last frame has special rules)
+
+        // todo: perfect game
     }
 }

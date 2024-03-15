@@ -81,5 +81,40 @@ namespace Exercises.Bowling.Tests
             // assert
             result.Should().BeTrue();
         }
+
+        [Fact]
+        public void AddRoll_WhenEmpty_SetsFirstRoll()
+        {
+            var frame = new Frame();
+
+            frame.AddRoll(1);
+
+            frame.FirstRoll.Should().Be(1);
+            frame.SecondRoll.Should().BeNull();
+        }
+
+        [Fact]
+        public void AddRoll_WhenHasFirstRoll_SetsSecondRoll()
+        {
+            var frame = new Frame {  FirstRoll = 1 };
+
+            frame.AddRoll(2);
+
+            frame.FirstRoll.Should().Be(1);
+            frame.SecondRoll.Should().Be(2);
+        }
+
+        [Fact]
+        public void AddRoll_WhenIsComplete_Throws()
+        {
+            var frame = new Frame { FirstRoll = 10 };
+
+            var roll = 2;
+            var action = () => frame.AddRoll(roll);
+
+            action.Should().Throw<InvalidOperationException>()
+                .WithMessage($"*{roll}*")
+                .WithMessage("*Frame is already complete*");
+        }
     }
 }
