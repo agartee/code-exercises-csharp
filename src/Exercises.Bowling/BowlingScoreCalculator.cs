@@ -19,7 +19,7 @@ namespace Exercises.Bowling
 
                 if (frame.IsSpare())
                 {
-                    var bonus = nextFrame?.FirstRoll;
+                    var bonus = nextFrame?.FirstRoll; // or third roll if 10th frame...
 
                     if (bonus == null)
                         return null;

@@ -2,6 +2,7 @@
 
 namespace Exercises.Bowling.Tests
 {
+
     public class FrameTests
     {
         [Fact]

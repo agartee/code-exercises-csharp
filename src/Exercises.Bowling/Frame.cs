@@ -7,7 +7,7 @@ namespace Exercises.Bowling
         public int? FirstRoll { get; set; }
         public int? SecondRoll { get; set; }
 
-        public void AddRoll(int roll)
+        public virtual void AddRoll(int roll)
         {
             if (IsComplete())
                 throw new InvalidOperationException($"Unable to add roll if { roll } to frame. Frame is already complete.");
@@ -18,7 +18,7 @@ namespace Exercises.Bowling
                 SecondRoll = roll;
         }
 
-        public bool IsComplete()
+        public virtual bool IsComplete()
         {
             return FirstRoll == 10 || SecondRoll != null;
         }
