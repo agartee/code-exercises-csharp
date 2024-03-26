@@ -172,6 +172,31 @@ namespace Exercises.Bowling.Tests
                 15); // tenth frame;
         }
 
+        [Fact]
+        public void Score_WithPerfectGame_ReturnsExpectedScoreWithTwoExtraRollsInLastFrame()
+        {
+            // arrange
+            var bowlingScoreCalculator = new BowlingScoreCalculator();
+            var rolls = new[] {
+                10, // first frame
+                10, // second frame
+                10, // third frame
+                10, // forth frame
+                10, // fifth frame
+                10, // sixth frame
+                10, // seventh frame
+                10, // eighth frame
+                10, // ninth frame
+                10, 10, 10 // tenth frame
+            };
+
+            // act
+            var result = bowlingScoreCalculator.Score(rolls);
+
+            // assert
+            result.Should().Be(300);
+        }
+
         // todo: perfect game
     }
 }

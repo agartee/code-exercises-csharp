@@ -11,29 +11,22 @@ namespace Exercises.Bowling
             var score = 0;
             foreach (var frame in frames)
             {
-                var nextFrame = frames
-                    .FirstOrDefault(f => f.Index == frame.Index + 1);
-
-                var nextNextFrame = frames
-                    .FirstOrDefault(f => f.Index == frame.Index + 2);
-
                 if (frame.IsSpare())
                 {
-                    var bonus = nextFrame?.FirstRoll; // or third roll if 10th frame...
+                    var bonus = frame is LastFrame 
+                        ? GetSpareBonusFromLastFrame(frames)
+                        : GetSpareBonusFromNextFrame(frames, frame.Index);
 
                     if (bonus == null)
                         return null;
-                    
+
                     score += frame.FirstRoll!.Value + frame.SecondRoll!.Value + bonus!.Value;
                 }
                 else if(frame.IsStrike())
                 {
-                    if (nextFrame == null)
-                        return null;
-
-                    var bonus = nextFrame.IsStrike()
-                        ? nextFrame.FirstRoll + nextNextFrame?.FirstRoll
-                        : nextFrame.FirstRoll + nextFrame.SecondRoll;
+                    var bonus = frame is LastFrame
+                        ? GetStrikeBonusFromLastFrame(frames)
+                        : GetStrikeBonusFromNextFrames(frames, frame.Index);
 
                     if (bonus == null)
                         return null;
@@ -49,9 +42,58 @@ namespace Exercises.Bowling
             return score;
         }
 
+        private int? GetSpareBonusFromNextFrame(IEnumerable<Frame> frames, int currentFrameIdx)
+        {
+            var nextFrame = frames
+                .FirstOrDefault(f => f.Index == currentFrameIdx + 1);
+
+            return nextFrame?.FirstRoll;
+        }
+
+        private int? GetSpareBonusFromLastFrame(IEnumerable<Frame> frames)
+        {
+            var lastFrame = frames
+                .OfType<LastFrame>()
+                .Single();
+
+            return lastFrame.ThirdRoll;
+        }
+
+        private int? GetStrikeBonusFromNextFrames(IEnumerable<Frame> frames, int currentFrameIdx)
+        {
+            var nextFrame = frames
+                .First(f => f.Index == currentFrameIdx + 1);
+
+            if(nextFrame is LastFrame)
+                return nextFrame.FirstRoll + nextFrame?.SecondRoll;
+
+            var nextNextFrame = frames
+                .FirstOrDefault(f => f.Index == currentFrameIdx + 2);
+
+            return nextFrame!.IsStrike()
+                ? nextFrame.FirstRoll + nextNextFrame?.FirstRoll
+                : nextFrame.FirstRoll + nextFrame.SecondRoll;
+        }
+
+        private int? GetStrikeBonusFromLastFrame(IEnumerable<Frame> frames)
+        {
+            var lastFrame = frames
+                .OfType<LastFrame>()
+                .Single();
+
+            return lastFrame.SecondRoll + lastFrame.ThirdRoll;
+        }
+
+
         private static Frame[] CreateFrames()
         {
-            return Enumerable.Range(1, 10).Select(i => new Frame {  Index = i }).ToArray();
+            var frames = Enumerable.Range(1, 9)
+                .Select(i => new Frame {  Index = i })
+                .ToList();
+
+            frames.Add(new LastFrame { Index = 10 });
+
+            return frames.ToArray();
         }
 
         private static Frame[] PopulateFrames(Frame[] frames, int[] rolls)
