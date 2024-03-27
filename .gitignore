@@ -403,7 +403,4 @@ FodyWeavers.xsd
 # Project-specific
 .bin/
 .test-coverage/
-.publish/
-.publish-sql/
-.env
 .vscode

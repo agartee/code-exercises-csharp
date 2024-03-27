@@ -1,0 +1,11 @@
+{
+  "solutionFile": "Exercises.sln",
+  "test": {
+    "exclusions": [
+      {
+        "project": "Exercises.Bowling",
+        "exclude": []
+      }
+    ]
+  }
+}
