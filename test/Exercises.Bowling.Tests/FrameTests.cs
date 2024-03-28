@@ -45,6 +45,19 @@ namespace Exercises.Bowling.Tests
         }
 
         [Fact]
+        public void IsSpare_WithNoRolls_ReturnsFalse()
+        {
+            // arrange
+            var frame = new Frame();
+
+            // act
+            var result = frame.IsSpare();
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
         public void IsSpare_WithFirstRollOnly_ReturnsFalse()
         {
             // arrange
@@ -78,6 +91,45 @@ namespace Exercises.Bowling.Tests
 
             // act
             var result = frame.IsSpare();
+
+            // assert
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void IsSpare_ImpossibleSetup_ReturnsFalse() // let's look at how to eliminate the need for this test...
+        {
+            // arrange
+            var frame = new Frame { SecondRoll = 1 };
+
+            // act
+            var result = frame.IsSpare();
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void IsStrike_WithNoRolls_ReturnsFalse()
+        {
+            // arrange
+            var frame = new Frame();
+
+            // act
+            var result = frame.IsStrike();
+
+            // assert
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void IsStrike_With10PinsInFirstRoll_ReturnsTrue()
+        {
+            // arrange
+            var frame = new Frame { FirstRoll = 10 };
+
+            // act
+            var result = frame.IsStrike();
 
             // assert
             result.Should().BeTrue();
